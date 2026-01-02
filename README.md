@@ -1,6 +1,6 @@
 # crypto
 
-Cryptography library written for recreation purpose. For now it includes base64 encoding functions and secure hash familty functions.
+Cryptography and related functions library written for recreation purpose. For now it includes base64 encoding functions and secure hash familty functions.
 
 ## Building
 
