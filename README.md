@@ -1,6 +1,6 @@
 # crypto
 
-Cryptography and related functions library written for recreation purpose. For now it includes base64 encoding functions and secure hash familty functions.
+Cryptography and related functions library written for recreation purpose.
 
 ## Building
 
@@ -24,8 +24,9 @@ int main()
 }
 ```
 
-You can also look into the test directory for some examples.
+You can also look into the `test` directory for some examples.
 
 ## Dependencies
 
 - [cmake](https://cmake.org/), build system.
+- [gmp](https://gmplib.org/) for big number arithmetic.
