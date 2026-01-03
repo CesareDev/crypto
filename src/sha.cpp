@@ -587,53 +587,56 @@ static std::string hash384(const std::string& input)
     return res.str();
 }
 
-std::string crypto::sha::HashString(const std::string& msg, crypto::sha::Algorithm algorithm)
+namespace crypto::sha
 {
-    switch (algorithm)
+    std::string HashString(const std::string& msg, crypto::sha::Algorithm algorithm)
     {
-        case crypto::sha::Algorithm::Sha1:
-            return hash1(msg);
-        case crypto::sha::Algorithm::Sha224:
-            return hash224(msg);
-        case crypto::sha::Algorithm::Sha256:
-            return hash256(msg);
-        case crypto::sha::Algorithm::Sha384:
-            return hash384(msg);
-        case crypto::sha::Algorithm::Sha512:
-            return hash512(msg);
-        default:
-            return hash1(msg);
+        switch (algorithm)
+        {
+            case crypto::sha::Algorithm::Sha1:
+                return hash1(msg);
+            case crypto::sha::Algorithm::Sha224:
+                return hash224(msg);
+            case crypto::sha::Algorithm::Sha256:
+                return hash256(msg);
+            case crypto::sha::Algorithm::Sha384:
+                return hash384(msg);
+            case crypto::sha::Algorithm::Sha512:
+                return hash512(msg);
+            default:
+                return hash1(msg);
+        }
     }
-}
 
-std::string crypto::sha::HashFile(const std::string& filename, crypto::sha::Algorithm algorithm)
-{
-    std::ifstream file_stream(filename, std::ios::binary | std::ios::ate);
-
-    if (!file_stream.is_open())
-        return "";
-
-    uint64_t file_size = file_stream.tellg();
-    file_stream.seekg(std::ios::beg);
-
-    std::string input {};
-    input.reserve(file_size);
-    if (!file_stream.read(input.data(), file_size).good())
-        return "";
-
-    switch (algorithm)
+    std::string HashFile(const std::string& filename, crypto::sha::Algorithm algorithm)
     {
-        case crypto::sha::Algorithm::Sha1:
-            return hash1(input);
-        case crypto::sha::Algorithm::Sha224:
-            return hash224(input);
-        case crypto::sha::Algorithm::Sha256:
-            return hash256(input);
-        case crypto::sha::Algorithm::Sha384:
-            return hash384(input);
-        case crypto::sha::Algorithm::Sha512:
-            return hash512(input);
-        default:
-            return hash1(input);
+        std::ifstream file_stream(filename, std::ios::binary | std::ios::ate);
+
+        if (!file_stream.is_open())
+            return "";
+
+        uint64_t file_size = file_stream.tellg();
+        file_stream.seekg(std::ios::beg);
+
+        std::string input {};
+        input.reserve(file_size);
+        if (!file_stream.read(input.data(), file_size).good())
+            return "";
+
+        switch (algorithm)
+        {
+            case crypto::sha::Algorithm::Sha1:
+                return hash1(input);
+            case crypto::sha::Algorithm::Sha224:
+                return hash224(input);
+            case crypto::sha::Algorithm::Sha256:
+                return hash256(input);
+            case crypto::sha::Algorithm::Sha384:
+                return hash384(input);
+            case crypto::sha::Algorithm::Sha512:
+                return hash512(input);
+            default:
+                return hash1(input);
+        }
     }
 }
