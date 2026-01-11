@@ -8,6 +8,7 @@ add_library(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/b64.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/sha.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/bignum.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rsa.cpp
 )
 
 # GNU bignum library

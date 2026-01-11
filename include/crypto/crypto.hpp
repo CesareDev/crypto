@@ -3,3 +3,4 @@
 #include "b64.hpp"
 #include "sha.hpp"
 #include "bignum.hpp"
+#include "rsa.hpp"
