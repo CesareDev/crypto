@@ -26,6 +26,10 @@ int main()
 
 You can also look into the `test` directory for some examples.
 
+## Disclaimer
+
+This library is made just for recreational purpose. If you want to use it for the same reason is okay, but do not use it in production code because it may contain bugs or implementation error.
+
 ## Dependencies
 
 - [cmake](https://cmake.org/), build system.
