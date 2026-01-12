@@ -2,45 +2,6 @@
 #include <sstream>
 #include <algorithm>
 
-static crypto::bn::bignum gcd(const crypto::bn::bignum& e, const crypto::bn::bignum& phi_n)
-{
-    size_t res { std::min(e, phi_n) };
-    while (res > 1) {
-        if (e % res == 0 && phi_n % res == 0)
-            break;
-        res--;
-    }
-    return res;
-}
-
-static crypto::bn::bignum inverse(crypto::bn::bignum e, const crypto::bn::bignum& module)
-{
-    crypto::bn::bignum t;
-    crypto::bn::bignum r { module };
-    crypto::bn::bignum new_t { 1 };
-    crypto::bn::bignum new_r { e };
-
-    while (new_r != 0)
-    {
-        crypto::bn::bignum quotient { r / new_r };
-
-        crypto::bn::bignum tmp_t { t };
-        t = new_t;
-        new_t = tmp_t - quotient * new_t;
-
-        crypto::bn::bignum tmp_r { r };
-        r = new_r;
-        new_r = tmp_r - quotient * new_r;
-    }
-
-    if (r > 1)
-        return 0;
-    if (t < 0)
-        t += module;
-
-    return t;
-}
-
 static crypto::bn::bignum string_to_bignum(const std::string& s)
 {
     crypto::bn::bignum result;
@@ -74,7 +35,7 @@ namespace crypto::rsa
             keys.valid = false;
             return keys;
         }
-        bn::bignum d { inverse(e, phi_n) };
+        bn::bignum d { bn::inverse_mod(e, phi_n) };
         if (d == 0)
         {
             keys.valid = false;

@@ -126,6 +126,8 @@ namespace crypto::bn
             operator int() const;
 
             friend bignum exp_mod(const bignum& base, const bignum& exponent, const bignum& mod);
+            friend bignum inverse_mod(const bignum& n, const bignum& mod);
+            friend bignum gcd(const bignum& a, const bignum& b);
 
             size_t bit_count() const;
             std::string get_string(int base) const;
@@ -135,4 +137,6 @@ namespace crypto::bn
     };
 
     bignum exp_mod(const bignum& base, const bignum& exponent, const bignum& mod);
+    bignum inverse_mod(const bignum& n, const bignum& mod);
+    bignum gcd(const bignum& a, const bignum& b);
 }

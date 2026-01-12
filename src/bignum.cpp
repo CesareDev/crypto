@@ -546,6 +546,20 @@ namespace crypto::bn
         return res;
     }
 
+    bignum inverse_mod(const bignum& n, const bignum& mod)
+    {
+        bignum res;
+        mpz_invert(res.m_Internal, n.m_Internal, mod.m_Internal);
+        return res;
+    }
+
+    bignum gcd(const bignum& a, const bignum& b)
+    {
+        bignum res;
+        mpz_gcd(res.m_Internal, a.m_Internal, b.m_Internal);
+        return res;
+    }
+
     size_t bignum::bit_count() const
     {
         return mpz_sizeinbase(m_Internal, 2);
