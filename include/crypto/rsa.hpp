@@ -5,29 +5,28 @@
 
 namespace crypto::rsa
 {
-    struct PublicKey
+    struct public_key
     {
         bn::bignum module;
         bn::bignum enc_exp;
         bool valid;
     };
 
-    struct PrivateKey
+    struct private_key
     {
         bn::bignum module;
         bn::bignum dec_exp;
         bool valid;
     };
 
-    struct Keys
+    struct keys
     {
-        PublicKey public_key;
-        PrivateKey private_key;
-        bool valid;
+        public_key pub_key;
+        private_key pri_key;
     };
 
-    Keys GenerateKey(const bn::bignum& prime_p, const bn::bignum& prime_q, const bn::bignum& e = 65537);
+    keys generate_keys(const bn::bignum& prime_p, const bn::bignum& prime_q, const bn::bignum& e = 65537);
 
-    std::string EncryptMessage(const PublicKey& public_key, const std::string& plain_text);
-    std::string DecryptMessage(const PrivateKey& private_key, const std::string& chiper_text);
+    std::vector<uint8_t> encrypt_message(const public_key& pub_key, const std::string& plain_text, const std::string& label = "");
+    std::string decrypt_message(const private_key& pri_key, const std::vector<uint8_t>& chiper_text, const std::string& label = "");
 }

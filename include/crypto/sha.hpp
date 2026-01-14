@@ -1,10 +1,11 @@
 #pragma once
 
+#include <crypto/bignum.hpp>
 #include <string>
 
 namespace crypto::sha
 {
-    enum class Algorithm
+    enum class algorithm
     {
         Sha1,
         Sha224,
@@ -13,6 +14,6 @@ namespace crypto::sha
         Sha512
     };
 
-    std::string HashString(const std::string& msg, Algorithm algorithm);
-    std::string HashFile(const std::string& filename, Algorithm algorithm);
+    bn::bignum hash_string(const std::string& msg, algorithm algorithm = algorithm::Sha1);
+    bn::bignum hash_file(const std::string& filename, algorithm algorithm = algorithm::Sha1);
 }

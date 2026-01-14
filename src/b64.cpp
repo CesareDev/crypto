@@ -44,10 +44,10 @@ struct Char
 
 namespace crypto::b64
 {
-    std::string EncodeString(const std::string& plaintext)
+    std::string encode_string(const std::string& input)
     {
         uint64_t i = 0;
-        uint64_t len = plaintext.length();
+        uint64_t len = input.length();
         uint64_t enconde_len = ((4 * len / 3) + 3) & ~3;
 
         std::string encoded_buf {};
@@ -55,18 +55,18 @@ namespace crypto::b64
 
         while (i < len)
         {
-            Char first_ch = { (uint8_t)plaintext[i], false };
+            Char first_ch = { (uint8_t)input[i], false };
             Char second_ch = { 0, true };
             Char third_ch = { 0, true };
 
             if (i + 1 < len)
             {
-                second_ch.c = plaintext[i + 1];
+                second_ch.c = input[i + 1];
                 second_ch.padding = false;
             }
             if (i + 2 < len)
             {
-                third_ch.c = plaintext[i + 2];
+                third_ch.c = input[i + 2];
                 third_ch.padding = false;
             }
 
@@ -86,16 +86,16 @@ namespace crypto::b64
         return encoded_buf;
     }
 
-    std::string DecodeString(const std::string& ciphertext)
+    std::string decode_string(const std::string& input)
     {
         uint64_t i = 0;
-        uint64_t len = ciphertext.length();
+        uint64_t len = input.length();
 
         if (len % 4 != 0)
             return "";
 
-        uint64_t index = ciphertext.length();
-        while (ciphertext[index] == '=')
+        uint64_t index = input.length();
+        while (input[index] == '=')
             index--;
         uint64_t decoded_len = (len / 4) * 3 - (len - index);
 
@@ -104,10 +104,10 @@ namespace crypto::b64
 
         while (i < len)
         {
-            unsigned char first_dec = decoding[ciphertext[i]];
-            unsigned char second_dec = decoding[ciphertext[i + 1]];
-            unsigned char third_dec = ciphertext[i + 2] == '=' ? 0 : decoding[ciphertext[i + 2]];
-            unsigned char fourth_dec = ciphertext[i + 3] == '=' ? 0 : decoding[ciphertext[i + 3]];
+            unsigned char first_dec = decoding[input[i]];
+            unsigned char second_dec = decoding[input[i + 1]];
+            unsigned char third_dec = input[i + 2] == '=' ? 0 : decoding[input[i + 2]];
+            unsigned char fourth_dec = input[i + 3] == '=' ? 0 : decoding[input[i + 3]];
 
             char first_ch = (first_dec << 2) | ((second_dec & 0b00110000) >> 4);
             char second_ch = ((second_dec & 0b00001111) << 4) | ((third_dec & 0b00111100) >> 2);
@@ -123,7 +123,7 @@ namespace crypto::b64
         return decoded_buffer;
     }
 
-    std::string EncodeFile(const std::string& input_file)
+    std::string encode_file(const std::string& input_file)
     {
         std::ifstream input_stream(input_file, std::ios::binary | std::ios::ate);
         if (!input_stream.is_open())
@@ -137,10 +137,10 @@ namespace crypto::b64
         if (!input_stream.read(buffer.data(), file_size).good())
             return "";
 
-        return EncodeString(buffer);
+        return encode_string(buffer);
     }
 
-    std::string DecodeFile(const std::string& input_file)
+    std::string decode_file(const std::string& input_file)
     {
         std::ifstream input_stream(input_file, std::ios::binary | std::ios::ate);
         if (!input_stream.is_open())
@@ -157,6 +157,6 @@ namespace crypto::b64
         if (!input_stream.read(buffer.data(), file_size).good())
             return "";
 
-        return DecodeString(buffer);
+        return decode_string(buffer);
     }
 }

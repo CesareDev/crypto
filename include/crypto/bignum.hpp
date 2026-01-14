@@ -1,7 +1,9 @@
 #pragma once
 
+#include <cstdint>
 #include <ostream>
 #include <gmp.h>
+#include <vector>
 
 namespace crypto::bn
 {
@@ -130,7 +132,9 @@ namespace crypto::bn
             friend bignum gcd(const bignum& a, const bignum& b);
 
             size_t bit_count() const;
+            size_t byte_count() const;
             std::string get_string(int base) const;
+            std::vector<uint8_t> get_byte_array(bool big_endian = false) const;
 
         private:
             mpz_t m_Internal;

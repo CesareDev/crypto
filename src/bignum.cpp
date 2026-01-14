@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <crypto/bignum.hpp>
 
 namespace crypto::bn
@@ -565,11 +566,31 @@ namespace crypto::bn
         return mpz_sizeinbase(m_Internal, 2);
     }
 
+    size_t bignum::byte_count() const
+    {
+        return (bit_count() + 7) / 8;
+    }
+
     std::string bignum::get_string(int base) const
     {
         char* tmp = mpz_get_str(NULL, base, m_Internal);
         std::string res { tmp };
         free(tmp);
+        return res;
+    }
+
+    std::vector<uint8_t> bignum::get_byte_array(bool big_endian) const
+    {
+        size_t size = byte_count();
+        std::vector<uint8_t> res;
+        res.reserve(size);
+        for (size_t i {}; i < size; ++i)
+        {
+            uint8_t b = static_cast<int>(*this >> (i * 8)) & 0xFF;
+            res.push_back(b);
+        }
+        if (big_endian)
+            std::reverse(res.begin(), res.end());
         return res;
     }
 }

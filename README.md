@@ -19,7 +19,7 @@ Usage is really simple just include the files that you need or direcly `<crypto/
 
 int main()
 {
-    std::cout << cypto::sha::HashString("Hello World!", crypto::sha::Algorithm::Sha256) << std::endl;
+    std::cout << cypto::sha::hash_string("Hello World!", crypto::sha::algorithm::Sha256) << std::endl;
     return 0;
 }
 ```

@@ -1,5 +1,4 @@
 #include <crypto/sha.hpp>
-
 #include <cstdint>
 #include <iomanip>
 #include <vector>
@@ -21,7 +20,7 @@ static uint64_t right_rotate(uint64_t value, uint64_t bits)
     return (value >> bits) | (value << (sizeof(uint64_t) * 8 - bits));
 }
 
-static std::string hash1(const std::string& input)
+static crypto::bn::bignum hash1(const std::string& input)
 {
     // Constant
     uint32_t h0 { 0x67452301 };
@@ -106,19 +105,21 @@ static std::string hash1(const std::string& input)
         h3 += d;
         h4 += e;
     }
-    
-    std::ostringstream res;
-    res << std::hex << std::setfill('0')
+
+    std::ostringstream oss;
+    oss << std::hex << std::setfill('0')
         << std::setw(8) << h0
         << std::setw(8) << h1
         << std::setw(8) << h2
         << std::setw(8) << h3
         << std::setw(8) << h4;
 
-    return res.str();
+    crypto::bn::bignum res(oss.str(), 16);
+
+    return res;
 }
 
-static std::string hash224(const std::string& input)
+static crypto::bn::bignum hash224(const std::string& input)
 {
     // Constant
     uint32_t h0 { 0xc1059ed8 };
@@ -215,8 +216,8 @@ static std::string hash224(const std::string& input)
         h7 += h;
     }
     
-    std::ostringstream res;
-    res << std::hex << std::setfill('0') 
+    std::ostringstream oss;
+    oss << std::hex << std::setfill('0') 
         << std::setw(8) << h0 
         << std::setw(8) << h1
         << std::setw(8) << h2
@@ -225,10 +226,12 @@ static std::string hash224(const std::string& input)
         << std::setw(8) << h5
         << std::setw(8) << h6;
 
-    return res.str();
+    crypto::bn::bignum res(oss.str(), 16);
+
+    return res;
 }
 
-static std::string hash256(const std::string& input)
+static crypto::bn::bignum hash256(const std::string& input)
 {
     // Constant
     uint32_t h0 = { 0x6a09e667 };
@@ -325,8 +328,8 @@ static std::string hash256(const std::string& input)
         h7 += h;
     }
     
-    std::ostringstream res;
-    res << std::hex << std::setfill('0') 
+    std::ostringstream oss;
+    oss << std::hex << std::setfill('0') 
         << std::setw(8) << h0
         << std::setw(8) << h1
         << std::setw(8) << h2
@@ -336,10 +339,12 @@ static std::string hash256(const std::string& input)
         << std::setw(8) << h6
         << std::setw(8) << h7;
 
-    return res.str();
+    crypto::bn::bignum res(oss.str(), 16);
+
+    return res;
 }
 
-static std::string hash512(const std::string& input)
+static crypto::bn::bignum hash512(const std::string& input)
 {
     uint64_t h0 = { 0x6a09e667f3bcc908 };
     uint64_t h1 = { 0xbb67ae8584caa73b };
@@ -450,8 +455,8 @@ static std::string hash512(const std::string& input)
         h7 += h;
     }
     
-    std::ostringstream res;
-    res << std::hex << std::setfill('0') 
+    std::ostringstream oss;
+    oss << std::hex << std::setfill('0') 
         << std::setw(16) << h0 
         << std::setw(16) << h1
         << std::setw(16) << h2
@@ -461,10 +466,12 @@ static std::string hash512(const std::string& input)
         << std::setw(16) << h6
         << std::setw(16) << h7;
 
-    return res.str();
+    crypto::bn::bignum res(oss.str(), 16);
+
+    return res;
 }
 
-static std::string hash384(const std::string& input)
+static crypto::bn::bignum hash384(const std::string& input)
 {
     uint64_t h0 { 0xcbbb9d5dc1059ed8 };
     uint64_t h1 { 0x629a292a367cd507 };
@@ -575,8 +582,8 @@ static std::string hash384(const std::string& input)
         h7 += h;
     }
     
-    std::ostringstream res;
-    res << std::hex << std::setfill('0') 
+    std::ostringstream oss;
+    oss << std::hex << std::setfill('0') 
         << std::setw(16) << h0 
         << std::setw(16) << h1
         << std::setw(16) << h2
@@ -584,36 +591,38 @@ static std::string hash384(const std::string& input)
         << std::setw(16) << h4
         << std::setw(16) << h5;
 
-    return res.str();
+    crypto::bn::bignum res(oss.str(), 16);
+
+    return res;
 }
 
 namespace crypto::sha
 {
-    std::string HashString(const std::string& msg, crypto::sha::Algorithm algorithm)
+    bn::bignum hash_string(const std::string& msg, crypto::sha::algorithm algorithm)
     {
         switch (algorithm)
         {
-            case crypto::sha::Algorithm::Sha1:
+            case crypto::sha::algorithm::Sha1:
                 return hash1(msg);
-            case crypto::sha::Algorithm::Sha224:
+            case crypto::sha::algorithm::Sha224:
                 return hash224(msg);
-            case crypto::sha::Algorithm::Sha256:
+            case crypto::sha::algorithm::Sha256:
                 return hash256(msg);
-            case crypto::sha::Algorithm::Sha384:
+            case crypto::sha::algorithm::Sha384:
                 return hash384(msg);
-            case crypto::sha::Algorithm::Sha512:
+            case crypto::sha::algorithm::Sha512:
                 return hash512(msg);
             default:
                 return hash1(msg);
         }
     }
 
-    std::string HashFile(const std::string& filename, crypto::sha::Algorithm algorithm)
+    bn::bignum hash_file(const std::string& filename, crypto::sha::algorithm algorithm)
     {
         std::ifstream file_stream(filename, std::ios::binary | std::ios::ate);
 
         if (!file_stream.is_open())
-            return "";
+            return bn::bignum();
 
         uint64_t file_size = file_stream.tellg();
         file_stream.seekg(std::ios::beg);
@@ -621,19 +630,19 @@ namespace crypto::sha
         std::string input {};
         input.reserve(file_size);
         if (!file_stream.read(input.data(), file_size).good())
-            return "";
+            return bn::bignum();
 
         switch (algorithm)
         {
-            case crypto::sha::Algorithm::Sha1:
+            case crypto::sha::algorithm::Sha1:
                 return hash1(input);
-            case crypto::sha::Algorithm::Sha224:
+            case crypto::sha::algorithm::Sha224:
                 return hash224(input);
-            case crypto::sha::Algorithm::Sha256:
+            case crypto::sha::algorithm::Sha256:
                 return hash256(input);
-            case crypto::sha::Algorithm::Sha384:
+            case crypto::sha::algorithm::Sha384:
                 return hash384(input);
-            case crypto::sha::Algorithm::Sha512:
+            case crypto::sha::algorithm::Sha512:
                 return hash512(input);
             default:
                 return hash1(input);
