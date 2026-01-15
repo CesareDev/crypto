@@ -1,4 +1,5 @@
 #include <algorithm>
+
 #include <crypto/bignum.hpp>
 
 namespace crypto::bn

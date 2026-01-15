@@ -6,7 +6,7 @@ add_subdirectory(test)
 add_library(
     ${PROJECT_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/src/b64.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/sha.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/hash.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/bignum.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rsa.cpp
 )

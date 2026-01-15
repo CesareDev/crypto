@@ -1,6 +1,6 @@
 #pragma once
 
 #include "b64.hpp"
-#include "sha.hpp"
+#include "hash.hpp"
 #include "bignum.hpp"
 #include "rsa.hpp"

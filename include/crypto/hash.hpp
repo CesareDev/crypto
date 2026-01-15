@@ -1,7 +1,7 @@
 #pragma once
 
-#include <crypto/bignum.hpp>
 #include <string>
+#include "bignum.hpp"
 
 namespace crypto::sha
 {
@@ -11,7 +11,8 @@ namespace crypto::sha
         Sha224,
         Sha256,
         Sha384,
-        Sha512
+        Sha512,
+        MD5
     };
 
     bn::bignum hash_string(const std::string& msg, algorithm algorithm = algorithm::Sha1);

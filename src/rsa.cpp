@@ -1,6 +1,7 @@
-#include <crypto/rsa.hpp>
-#include <crypto/sha.hpp>
 #include <random> // TODO use a proper random number generator
+
+#include <crypto/hash.hpp>
+#include <crypto/rsa.hpp>
 
 static crypto::bn::bignum array_to_bignum(const std::vector<uint8_t>& arr)
 {

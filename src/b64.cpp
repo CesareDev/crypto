@@ -1,8 +1,8 @@
-#include <crypto/b64.hpp>
-
 #include <cstdint>
 #include <unordered_map>
 #include <fstream>
+
+#include <crypto/b64.hpp>
 
 static uint8_t encoding[] =
 {
