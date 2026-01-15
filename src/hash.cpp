@@ -637,7 +637,7 @@ static crypto::bn::bignum hashmd5(const std::string& input)
 
     pre_proc.push_back(0x80);
 
-    while ((pre_proc.size() * 8) % 512 != 448)
+    while (pre_proc.size() % 64 != 56)
         pre_proc.push_back(0x00);
 
     uint64_t bit_len { orginal_size * 8 };
@@ -696,10 +696,6 @@ static crypto::bn::bignum hashmd5(const std::string& input)
     }
 
     std::ostringstream oss;
-    auto out = [&](uint32_t x) {
-        for (int i = 0; i < 4; ++i)
-            oss << std::setw(2) << ((x >> (8*i)) & 0xff);
-    };
 
     uint32_t fa {};
     fa |= (a0 << 24) & 0xff000000;
@@ -764,15 +760,14 @@ namespace crypto::sha
         std::ifstream file_stream(filename, std::ios::binary | std::ios::ate);
 
         if (!file_stream.is_open())
-            return bn::bignum();
+            throw std::runtime_error("[HASHING] Error opening file: " + filename);
 
         uint64_t file_size = file_stream.tellg();
         file_stream.seekg(std::ios::beg);
 
-        std::string input {};
-        input.reserve(file_size);
+        std::string input(file_size, 0);
         if (!file_stream.read(input.data(), file_size).good())
-            return bn::bignum();
+            throw std::runtime_error("[HASHING] Error reading file: " + filename);
 
         switch (algorithm)
         {

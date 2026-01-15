@@ -35,6 +35,17 @@ namespace crypto::bn
         mpz_init_set_str(m_Internal, string_rep.c_str(), base);
     }
 
+    bignum::bignum(const std::vector<uint8_t>& byte_array, bool big_endian)
+    {
+        std::vector<uint8_t> tmp(byte_array.begin(), byte_array.end());
+        if (!big_endian)
+            std::reverse(tmp.begin(), tmp.end());
+        bn::bignum result;
+        for (auto c : byte_array)
+            result = result * 256 + c;
+        *this = result;
+    }
+
     bignum::~bignum()
     {
         mpz_clear(m_Internal);

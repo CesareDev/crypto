@@ -16,6 +16,7 @@ namespace crypto::bn
             bignum(int n);
             bignum(size_t n);
             bignum(const std::string& string_rep, int base);
+            bignum(const std::vector<uint8_t>& byte_array, bool big_endian);
             ~bignum();
 
             friend std::ostream& operator<<(std::ostream& stream, const bignum& bignum);

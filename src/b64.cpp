@@ -132,8 +132,7 @@ namespace crypto::b64
         uint64_t file_size = input_stream.tellg();
         input_stream.seekg(std::ios::beg);
 
-        std::string buffer;
-        buffer.reserve(file_size);
+        std::string buffer(file_size, 0);
         if (!input_stream.read(buffer.data(), file_size).good())
             return "";
 
@@ -152,8 +151,7 @@ namespace crypto::b64
         if (file_size % 4 != 0)
             return "";
 
-        std::string buffer;
-        buffer.reserve(file_size);
+        std::string buffer(file_size, 0);
         if (!input_stream.read(buffer.data(), file_size).good())
             return "";
 
