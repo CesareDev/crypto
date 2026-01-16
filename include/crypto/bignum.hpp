@@ -132,6 +132,7 @@ namespace crypto::bn
             size_t byte_count() const;
             std::string get_string(int base) const;
             std::vector<uint8_t> get_byte_array(bool big_endian = false) const;
+            std::string get_byte_string(bool big_endian = false) const;
 
             friend bignum exp(const bignum& base, size_t exponent);
             friend bignum exp_mod(const bignum& base, const bignum& exponent, const bignum& mod);

@@ -587,6 +587,12 @@ namespace crypto::bn
         return res;
     }
 
+    std::string bignum::get_byte_string(bool big_endian) const
+    {
+        std::vector<uint8_t> bin_array { get_byte_array(big_endian) };
+        return std::string(bin_array.begin(), bin_array.end());
+    }
+
     bignum exp(const bignum& base, size_t exponent)
     {
         bignum res;
