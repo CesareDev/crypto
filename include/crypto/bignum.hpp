@@ -128,20 +128,26 @@ namespace crypto::bn
             operator size_t() const;
             operator int() const;
 
-            friend bignum exp_mod(const bignum& base, const bignum& exponent, const bignum& mod);
-            friend bignum inverse_mod(const bignum& n, const bignum& mod);
-            friend bignum gcd(const bignum& a, const bignum& b);
-
             size_t bit_count() const;
             size_t byte_count() const;
             std::string get_string(int base) const;
             std::vector<uint8_t> get_byte_array(bool big_endian = false) const;
 
+            friend bignum exp(const bignum& base, size_t exponent);
+            friend bignum exp_mod(const bignum& base, const bignum& exponent, const bignum& mod);
+            friend bignum inverse_mod(const bignum& n, const bignum& mod);
+            friend bignum gcd(const bignum& a, const bignum& b);
+            friend bignum next_prime(const bignum& n);
+            friend bignum generate_prime(size_t bit_size);
+
         private:
             mpz_t m_Internal;
     };
 
+    bignum exp(const bignum& base, size_t exponent);
     bignum exp_mod(const bignum& base, const bignum& exponent, const bignum& mod);
     bignum inverse_mod(const bignum& n, const bignum& mod);
     bignum gcd(const bignum& a, const bignum& b);
+    bignum next_prime(const bignum& n);
+    bignum generate_prime(size_t bit_size);
 }

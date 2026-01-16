@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <random>
+#include <chrono>
 
 #include <crypto/bignum.hpp>
 
@@ -552,27 +554,6 @@ namespace crypto::bn
         return mpz_get_si(m_Internal);
     }
 
-    bignum exp_mod(const bignum& base, const bignum& exponent, const bignum& mod)
-    {
-        bignum res;
-        mpz_powm(res.m_Internal, base.m_Internal, exponent.m_Internal, mod.m_Internal);
-        return res;
-    }
-
-    bignum inverse_mod(const bignum& n, const bignum& mod)
-    {
-        bignum res;
-        mpz_invert(res.m_Internal, n.m_Internal, mod.m_Internal);
-        return res;
-    }
-
-    bignum gcd(const bignum& a, const bignum& b)
-    {
-        bignum res;
-        mpz_gcd(res.m_Internal, a.m_Internal, b.m_Internal);
-        return res;
-    }
-
     size_t bignum::bit_count() const
     {
         return mpz_sizeinbase(m_Internal, 2);
@@ -604,5 +585,67 @@ namespace crypto::bn
         if (big_endian)
             std::reverse(res.begin(), res.end());
         return res;
+    }
+
+    bignum exp(const bignum& base, size_t exponent)
+    {
+        bignum res;
+        mpz_pow_ui(res.m_Internal, base.m_Internal, exponent);
+        return res;
+    }
+
+    bignum exp_mod(const bignum& base, const bignum& exponent, const bignum& mod)
+    {
+        bignum res;
+        mpz_powm(res.m_Internal, base.m_Internal, exponent.m_Internal, mod.m_Internal);
+        return res;
+    }
+
+    bignum inverse_mod(const bignum& n, const bignum& mod)
+    {
+        bignum res;
+        mpz_invert(res.m_Internal, n.m_Internal, mod.m_Internal);
+        return res;
+    }
+
+    bignum gcd(const bignum& a, const bignum& b)
+    {
+        bignum res;
+        mpz_gcd(res.m_Internal, a.m_Internal, b.m_Internal);
+        return res;
+    }
+
+    bignum next_prime(const bignum& n)
+    {
+        bignum res;
+        mpz_nextprime(res.m_Internal, n.m_Internal);
+        return res;
+    }
+
+    bignum generate_prime(size_t bit_size)
+    {
+        bignum prime {};
+        bignum tmp {};
+
+        std::random_device dev;
+        std::mt19937 rng(dev());
+        auto seed1 { std::uniform_int_distribution<std::mt19937::result_type>(0, UINT64_MAX)(rng) };
+        auto seed2 { std::chrono::steady_clock::now().time_since_epoch().count() };
+        auto seed = seed1 ^ seed2;
+
+        gmp_randstate_t state { 0 };
+        gmp_randinit_mt(state);
+        gmp_randseed_ui(state, seed);
+    
+        while (mpz_sizeinbase(prime.m_Internal, 2) != bit_size)
+        {
+            mpz_urandomb(tmp.m_Internal, state, bit_size);
+            mpz_setbit(tmp.m_Internal, bit_size - 1);
+            mpz_setbit(tmp.m_Internal, 0);
+            mpz_nextprime(prime.m_Internal, tmp.m_Internal);
+        }
+
+        gmp_randclear(state);
+        return prime;
     }
 }

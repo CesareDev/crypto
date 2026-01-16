@@ -1,4 +1,5 @@
 #include <random> // TODO use a proper random number generator
+#include <chrono>
 
 #include <crypto/hash.hpp>
 #include <crypto/rsa.hpp>
@@ -85,7 +86,7 @@ namespace crypto::rsa
     std::vector<uint8_t> encrypt_message(const public_key& pub_key, const std::string& plain_text, const std::string& label)
     {
         if (!pub_key.valid)
-            return {};
+            throw std::runtime_error("[RSA] Publick key non valid");
 
         std::vector<uint8_t> msg(plain_text.begin(), plain_text.end());
         std::vector<uint8_t> l_hash = crypto::sha::hash_string(label, sha::algorithm::Sha256).get_byte_array(true);
@@ -96,7 +97,7 @@ namespace crypto::rsa
         int64_t ps_len = k - m_len - 2 * h_len - 2;
 
         if (ps_len < 0)
-            return {};
+            throw std::runtime_error("[RSA] Encoding error (ps_len)");
 
         std::vector<uint8_t> ps(ps_len, 0);
         std::vector<uint8_t> db;
@@ -113,8 +114,9 @@ namespace crypto::rsa
         seed.reserve(h_len);
         std::random_device dev;
         std::mt19937 rng(dev());
+        auto time_seed { std::chrono::steady_clock::now().time_since_epoch().count() };
         for (uint64_t i {}; i < h_len; ++i)
-            seed.push_back(std::uniform_int_distribution<std::mt19937::result_type>(0, 255)(rng));
+            seed.push_back(std::uniform_int_distribution<std::mt19937::result_type>(0, UINT8_MAX)(rng) ^ static_cast<uint8_t>(time_seed));
 
         std::vector<uint8_t> db_mask { mgf1(seed, k - h_len - 1) };
         uint64_t masked_db_len = k - h_len - 1;
@@ -138,7 +140,7 @@ namespace crypto::rsa
         // Encryption
         bn::bignum m { array_to_bignum(em) };
         if (m >= pub_key.module)
-            return {};
+            throw std::runtime_error("[RSA] Encoding error (em too long)");
         bn::bignum c { bn::exp_mod(m, pub_key.enc_exp, pub_key.module) };
         std::vector<uint8_t> C { bignum_to_array(c, k) };
         return C;
@@ -148,17 +150,17 @@ namespace crypto::rsa
     {
         uint64_t k { pri_key.module.byte_count() };
         if (chiper_text.size() != k)
-            return {};
+            throw std::runtime_error("[RSA] Chiper text non valid");
         uint64_t h_len { 32 };
         if (!pri_key.valid)
-            return {};
+            throw std::runtime_error("[RSA] Private key non valid");
         bn::bignum c { array_to_bignum(chiper_text) };
         bn::bignum m { bn::exp_mod(c, pri_key.dec_exp, pri_key.module) };
         std::vector<uint8_t> em { bignum_to_array(m, k) };
         std::vector<uint8_t> l_hash { sha::hash_string(label, sha::algorithm::Sha256).get_byte_array(true) };
         uint8_t y = em[0];
         if (y != 0x00)
-            return {};
+            throw std::runtime_error("[RSA] Decoding error (y != 0x00)");
         std::vector<uint8_t> masked_seed(em.begin() + 1, em.begin() + 1 + h_len);
         std::vector<uint8_t> masked_db(em.begin() + 1 + h_len, em.end());
         std::vector<uint8_t> seed_mask { mgf1(masked_db, h_len) };
@@ -172,12 +174,12 @@ namespace crypto::rsa
             db[i] = masked_db[i] ^ db_mask[i];
         std::vector<uint8_t> l_hash1(db.begin(), db.begin() + h_len);
         if (l_hash != l_hash1)
-            return {};
+            throw std::runtime_error("[RSA] Decoding error (l_hash != l_hash')");
         uint64_t index = h_len;
         while (index < db.size() && db[index] == 0x00)
             ++index;
         if (index >= db.size() || db[index] != 0x01)
-            return {};
+            throw std::runtime_error("[RSA] Decoding error (No 0x01 sepator)");
         ++index;
         std::vector<uint8_t> msg(db.begin() + index, db.end());
         return std::string(msg.begin(), msg.end());

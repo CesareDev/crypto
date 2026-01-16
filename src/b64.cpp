@@ -92,7 +92,7 @@ namespace crypto::b64
         uint64_t len = input.length();
 
         if (len % 4 != 0)
-            return "";
+            throw std::runtime_error("[BASE 64] Encoded input non valid");
 
         uint64_t index = input.length();
         while (input[index] == '=')
@@ -127,14 +127,14 @@ namespace crypto::b64
     {
         std::ifstream input_stream(input_file, std::ios::binary | std::ios::ate);
         if (!input_stream.is_open())
-            return "";
+            throw std::runtime_error("[BASE 64] Error opening file: " + input_file);
 
         uint64_t file_size = input_stream.tellg();
         input_stream.seekg(std::ios::beg);
 
         std::string buffer(file_size, 0);
         if (!input_stream.read(buffer.data(), file_size).good())
-            return "";
+            throw std::runtime_error("[BASE 64] Error reading file: " + input_file);
 
         return encode_string(buffer);
     }
@@ -143,17 +143,17 @@ namespace crypto::b64
     {
         std::ifstream input_stream(input_file, std::ios::binary | std::ios::ate);
         if (!input_stream.is_open())
-            return "";
+            throw std::runtime_error("[BASE 64] Error opening file: " + input_file);
 
         uint64_t file_size = input_stream.tellg();
         input_stream.seekg(std::ios::beg);
 
         if (file_size % 4 != 0)
-            return "";
+            throw std::runtime_error("[BASE 64] Non valid file: " + input_file);
 
         std::string buffer(file_size, 0);
         if (!input_stream.read(buffer.data(), file_size).good())
-            return "";
+            throw std::runtime_error("[BASE 64] Error reading file: " + input_file);
 
         return decode_string(buffer);
     }
