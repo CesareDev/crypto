@@ -734,54 +734,54 @@ static crypto::bn::bignum hashmd5(const std::string& input)
 
 namespace crypto::sha
 {
-    bn::bignum hash_string(const std::string& msg, crypto::sha::algorithm algorithm)
+    bn::bignum hash_string(const std::string& input, crypto::hash::algorithm algorithm)
     {
         switch (algorithm)
         {
-            case crypto::sha::algorithm::Sha1:
-                return hash1(msg);
-            case crypto::sha::algorithm::Sha224:
-                return hash224(msg);
-            case crypto::sha::algorithm::Sha256:
-                return hash256(msg);
-            case crypto::sha::algorithm::Sha384:
-                return hash384(msg);
-            case crypto::sha::algorithm::Sha512:
-                return hash512(msg);
-            case crypto::sha::algorithm::MD5:
-                return hashmd5(msg);
+            case crypto::hash::algorithm::Sha1:
+                return hash1(input);
+            case crypto::hash::algorithm::Sha224:
+                return hash224(input);
+            case crypto::hash::algorithm::Sha256:
+                return hash256(input);
+            case crypto::hash::algorithm::Sha384:
+                return hash384(input);
+            case crypto::hash::algorithm::Sha512:
+                return hash512(input);
+            case crypto::hash::algorithm::MD5:
+                return hashmd5(input);
             default:
-                return hash1(msg);
+                return hash1(input);
         }
     }
 
-    bn::bignum hash_file(const std::string& filename, crypto::sha::algorithm algorithm)
+    bn::bignum hash_file(const std::string& input_file, crypto::hash::algorithm algorithm)
     {
-        std::ifstream file_stream(filename, std::ios::binary | std::ios::ate);
+        std::ifstream file_stream(input_file, std::ios::binary | std::ios::ate);
 
         if (!file_stream.is_open())
-            throw std::runtime_error("[HASHING] Error opening file: " + filename);
+            throw std::runtime_error("[HASHING] Error opening file: " + input_file);
 
         uint64_t file_size = file_stream.tellg();
         file_stream.seekg(std::ios::beg);
 
         std::string input(file_size, 0);
         if (!file_stream.read(input.data(), file_size).good())
-            throw std::runtime_error("[HASHING] Error reading file: " + filename);
+            throw std::runtime_error("[HASHING] Error reading file: " + input_file);
 
         switch (algorithm)
         {
-            case crypto::sha::algorithm::Sha1:
+            case crypto::hash::algorithm::Sha1:
                 return hash1(input);
-            case crypto::sha::algorithm::Sha224:
+            case crypto::hash::algorithm::Sha224:
                 return hash224(input);
-            case crypto::sha::algorithm::Sha256:
+            case crypto::hash::algorithm::Sha256:
                 return hash256(input);
-            case crypto::sha::algorithm::Sha384:
+            case crypto::hash::algorithm::Sha384:
                 return hash384(input);
-            case crypto::sha::algorithm::Sha512:
+            case crypto::hash::algorithm::Sha512:
                 return hash512(input);
-            case crypto::sha::algorithm::MD5:
+            case crypto::hash::algorithm::MD5:
                 return hashmd5(input);
             default:
                 return hash1(input);

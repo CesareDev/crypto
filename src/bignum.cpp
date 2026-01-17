@@ -22,12 +22,17 @@ namespace crypto::bn
         mpz_swap(m_Internal, other.m_Internal);
     }
 
-    bignum::bignum(int n)
+    bignum::bignum(int32_t n)
     {
         mpz_init_set_si(m_Internal, n);
     }
 
-    bignum::bignum(size_t n)
+    bignum::bignum(int64_t n)
+    {
+        mpz_init_set_si(m_Internal, n);
+    }
+
+    bignum::bignum(uint64_t n)
     {
         mpz_init_set_ui(m_Internal, n);
     }
@@ -86,52 +91,77 @@ namespace crypto::bn
         return lhs %= rhs;
     }
 
-    bignum operator+(bignum lhs, size_t rhs)
+    bignum operator+(bignum lhs, int32_t rhs)
     {
         return lhs += rhs;
     }
 
-    bignum operator-(bignum lhs, size_t rhs)
+    bignum operator-(bignum lhs, int32_t rhs)
     {
         return lhs -= rhs;
     }
 
-    bignum operator*(bignum lhs, size_t rhs)
+    bignum operator*(bignum lhs, int32_t rhs)
     {
         return lhs *= rhs;
     }
 
-    bignum operator/(bignum lhs, size_t rhs)
+    bignum operator/(bignum lhs, int32_t rhs)
     {
         return lhs /= rhs;
     }
 
-    bignum operator%(bignum lhs, size_t rhs)
+    bignum operator%(bignum lhs, int32_t rhs)
     {
         return lhs %= rhs;
     }
 
-    bignum operator+(bignum lhs, int rhs)
+    bignum operator+(bignum lhs, int64_t rhs)
     {
         return lhs += rhs;
     }
 
-    bignum operator-(bignum lhs, int rhs)
+    bignum operator-(bignum lhs, int64_t rhs)
     {
         return lhs -= rhs;
     }
 
-    bignum operator*(bignum lhs, int rhs)
+    bignum operator*(bignum lhs, int64_t rhs)
     {
         return lhs *= rhs;
     }
 
-    bignum operator/(bignum lhs, int rhs)
+    bignum operator/(bignum lhs, int64_t rhs)
     {
         return lhs /= rhs;
     }
 
-    bignum operator%(bignum lhs, int rhs)
+    bignum operator%(bignum lhs, int64_t rhs)
+    {
+        return lhs %= rhs;
+    }
+
+    bignum operator+(bignum lhs, uint64_t rhs)
+    {
+        return lhs += rhs;
+    }
+
+    bignum operator-(bignum lhs, uint64_t rhs)
+    {
+        return lhs -= rhs;
+    }
+
+    bignum operator*(bignum lhs, uint64_t rhs)
+    {
+        return lhs *= rhs;
+    }
+
+    bignum operator/(bignum lhs, uint64_t rhs)
+    {
+        return lhs /= rhs;
+    }
+
+    bignum operator%(bignum lhs, uint64_t rhs)
     {
         return lhs %= rhs;
     }
@@ -166,37 +196,7 @@ namespace crypto::bn
         return *this;
     }
 
-    bignum& bignum::operator+=(size_t other)
-    {
-        mpz_add_ui(m_Internal, m_Internal, other);
-        return *this;
-    }
-
-    bignum& bignum::operator-=(size_t other)
-    {
-        mpz_sub_ui(m_Internal, m_Internal, other);
-        return *this;
-    }
-
-    bignum& bignum::operator*=(size_t other)
-    {
-        mpz_mul_ui(m_Internal, m_Internal, other);
-        return *this;
-    }
-
-    bignum& bignum::operator/=(size_t other)
-    {
-        mpz_tdiv_q_ui(m_Internal, m_Internal, other);
-        return *this;
-    }
-
-    bignum& bignum::operator%=(size_t other)
-    {
-        mpz_mod_ui(m_Internal, m_Internal, other);
-        return *this;
-    }
-
-    bignum& bignum::operator+=(int other)
+    bignum& bignum::operator+=(int32_t other)
     {
         mpz_t tmp;
         mpz_init_set_si(tmp, other);
@@ -205,7 +205,7 @@ namespace crypto::bn
         return *this;
     }
 
-    bignum& bignum::operator-=(int other)
+    bignum& bignum::operator-=(int32_t other)
     {
         mpz_t tmp;
         mpz_init_set_si(tmp, other);
@@ -214,7 +214,7 @@ namespace crypto::bn
         return *this;
     }
 
-    bignum& bignum::operator*=(int other)
+    bignum& bignum::operator*=(int32_t other)
     {
         mpz_t tmp;
         mpz_init_set_si(tmp, other);
@@ -223,7 +223,7 @@ namespace crypto::bn
         return *this;
     }
 
-    bignum& bignum::operator/=(int other)
+    bignum& bignum::operator/=(int32_t other)
     {
         mpz_t tmp;
         mpz_init_set_si(tmp, other);
@@ -232,12 +232,87 @@ namespace crypto::bn
         return *this;
     }
 
-    bignum& bignum::operator%=(int other)
+    bignum& bignum::operator%=(int32_t other)
     {
         mpz_t tmp;
         mpz_init_set_si(tmp, other);
         mpz_mul(m_Internal, m_Internal, tmp);
         mpz_clear(tmp);
+        return *this;
+    }
+
+    bignum& bignum::operator+=(int64_t other)
+    {
+        mpz_t tmp;
+        mpz_init_set_si(tmp, other);
+        mpz_add(m_Internal, m_Internal, tmp);
+        mpz_clear(tmp);
+        return *this;
+    }
+
+    bignum& bignum::operator-=(int64_t other)
+    {
+        mpz_t tmp;
+        mpz_init_set_si(tmp, other);
+        mpz_sub(m_Internal, m_Internal, tmp);
+        mpz_clear(tmp);
+        return *this;
+    }
+
+    bignum& bignum::operator*=(int64_t other)
+    {
+        mpz_t tmp;
+        mpz_init_set_si(tmp, other);
+        mpz_mul(m_Internal, m_Internal, tmp);
+        mpz_clear(tmp);
+        return *this;
+    }
+
+    bignum& bignum::operator/=(int64_t other)
+    {
+        mpz_t tmp;
+        mpz_init_set_si(tmp, other);
+        mpz_tdiv_q(m_Internal, m_Internal, tmp);
+        mpz_clear(tmp);
+        return *this;
+    }
+
+    bignum& bignum::operator%=(int64_t other)
+    {
+        mpz_t tmp;
+        mpz_init_set_si(tmp, other);
+        mpz_mul(m_Internal, m_Internal, tmp);
+        mpz_clear(tmp);
+        return *this;
+    }
+
+    bignum& bignum::operator+=(uint64_t other)
+    {
+        mpz_add_ui(m_Internal, m_Internal, other);
+        return *this;
+    }
+
+    bignum& bignum::operator-=(uint64_t other)
+    {
+        mpz_sub_ui(m_Internal, m_Internal, other);
+        return *this;
+    }
+
+    bignum& bignum::operator*=(uint64_t other)
+    {
+        mpz_mul_ui(m_Internal, m_Internal, other);
+        return *this;
+    }
+
+    bignum& bignum::operator/=(uint64_t other)
+    {
+        mpz_tdiv_q_ui(m_Internal, m_Internal, other);
+        return *this;
+    }
+
+    bignum& bignum::operator%=(uint64_t other)
+    {
+        mpz_mod_ui(m_Internal, m_Internal, other);
         return *this;
     }
 
@@ -271,64 +346,94 @@ namespace crypto::bn
         return mpz_cmp(lhs.m_Internal, rhs.m_Internal) >= 0;
     }
 
-    bool operator==(const bignum& lhs, size_t rhs)
-    {
-        return mpz_cmp_ui(lhs.m_Internal, rhs) == 0;
-    }
-
-    bool operator!=(const bignum& lhs, size_t rhs)
-    {
-        return mpz_cmp_ui(lhs.m_Internal, rhs) != 0;
-    }
-
-    bool operator<(const bignum& lhs, size_t rhs)
-    {
-        return mpz_cmp_ui(lhs.m_Internal, rhs) < 0;
-    }
-
-    bool operator<=(const bignum& lhs, size_t rhs)
-    {
-        return mpz_cmp_ui(lhs.m_Internal, rhs) <= 0;
-    }
-
-    bool operator>(const bignum& lhs, size_t rhs)
-    {
-        return mpz_cmp_ui(lhs.m_Internal, rhs) > 0;
-    }
-
-    bool operator>=(const bignum& lhs, size_t rhs)
-    {
-        return mpz_cmp_ui(lhs.m_Internal, rhs) >= 0;
-    }
-
-    bool operator==(const bignum& lhs, int rhs)
+    bool operator==(const bignum& lhs, int32_t rhs)
     {
         return mpz_cmp_si(lhs.m_Internal, rhs) == 0;
     }
 
-    bool operator!=(const bignum& lhs, int rhs)
+    bool operator!=(const bignum& lhs, int32_t rhs)
     {
         return mpz_cmp_si(lhs.m_Internal, rhs) != 0;
     }
 
-    bool operator<(const bignum& lhs, int rhs)
+    bool operator<(const bignum& lhs, int32_t rhs)
     {
         return mpz_cmp_si(lhs.m_Internal, rhs) < 0;
     }
 
-    bool operator<=(const bignum& lhs, int rhs)
+    bool operator<=(const bignum& lhs, int32_t rhs)
     {
         return mpz_cmp_si(lhs.m_Internal, rhs) <= 0;
     }
 
-    bool operator>(const bignum& lhs, int rhs)
+    bool operator>(const bignum& lhs, int32_t rhs)
     {
         return mpz_cmp_si(lhs.m_Internal, rhs) > 0;
     }
 
-    bool operator>=(const bignum& lhs, int rhs)
+    bool operator>=(const bignum& lhs, int32_t rhs)
     {
         return mpz_cmp_si(lhs.m_Internal, rhs) >= 0;
+    }
+
+    bool operator==(const bignum& lhs, int64_t rhs)
+    {
+        return mpz_cmp_si(lhs.m_Internal, rhs) == 0;
+    }
+
+    bool operator!=(const bignum& lhs, int64_t rhs)
+    {
+        return mpz_cmp_si(lhs.m_Internal, rhs) != 0;
+    }
+
+    bool operator<(const bignum& lhs, int64_t rhs)
+    {
+        return mpz_cmp_si(lhs.m_Internal, rhs) < 0;
+    }
+
+    bool operator<=(const bignum& lhs, int64_t rhs)
+    {
+        return mpz_cmp_si(lhs.m_Internal, rhs) <= 0;
+    }
+
+    bool operator>(const bignum& lhs, int64_t rhs)
+    {
+        return mpz_cmp_si(lhs.m_Internal, rhs) > 0;
+    }
+
+    bool operator>=(const bignum& lhs, int64_t rhs)
+    {
+        return mpz_cmp_si(lhs.m_Internal, rhs) >= 0;
+    }
+
+    bool operator==(const bignum& lhs, uint64_t rhs)
+    {
+        return mpz_cmp_ui(lhs.m_Internal, rhs) == 0;
+    }
+
+    bool operator!=(const bignum& lhs, uint64_t rhs)
+    {
+        return mpz_cmp_ui(lhs.m_Internal, rhs) != 0;
+    }
+
+    bool operator<(const bignum& lhs, uint64_t rhs)
+    {
+        return mpz_cmp_ui(lhs.m_Internal, rhs) < 0;
+    }
+
+    bool operator<=(const bignum& lhs, uint64_t rhs)
+    {
+        return mpz_cmp_ui(lhs.m_Internal, rhs) <= 0;
+    }
+
+    bool operator>(const bignum& lhs, uint64_t rhs)
+    {
+        return mpz_cmp_ui(lhs.m_Internal, rhs) > 0;
+    }
+
+    bool operator>=(const bignum& lhs, uint64_t rhs)
+    {
+        return mpz_cmp_ui(lhs.m_Internal, rhs) >= 0;
     }
 
     bignum bignum::operator-() const
@@ -349,7 +454,7 @@ namespace crypto::bn
         return *this;
     }
 
-    bignum bignum::operator++(int)
+    bignum bignum::operator++(int32_t)
     {
         bignum tmp = *this;
         *this += 1;
@@ -362,7 +467,7 @@ namespace crypto::bn
         return *this;
     }
 
-    bignum bignum::operator--(int)
+    bignum bignum::operator--(int32_t)
     {
         bignum tmp = *this;
         *this -= 1;
@@ -383,6 +488,21 @@ namespace crypto::bn
         return *this;
     }
 
+    bignum operator&(bignum lhs, const bignum& rhs)
+    {
+        return lhs &= rhs;
+    }
+
+    bignum operator|(bignum lhs, const bignum& rhs)
+    {
+        return lhs |= rhs;
+    }
+
+    bignum operator^(bignum lhs, const bignum& rhs)
+    {
+        return lhs ^= rhs;
+    }
+
     bignum& bignum::operator&=(const bignum& other)
     {
         mpz_and(m_Internal, m_Internal, other.m_Internal);
@@ -401,64 +521,32 @@ namespace crypto::bn
         return *this;
     }
 
-    bignum operator&(bignum lhs, const bignum& rhs)
+    bignum operator&(bignum lhs, int32_t rhs)
     {
         return lhs &= rhs;
     }
 
-    bignum operator|(bignum lhs, const bignum& rhs)
+    bignum operator|(bignum lhs, int32_t rhs)
     {
         return lhs |= rhs;
     }
 
-    bignum operator^(bignum lhs, const bignum& rhs)
+    bignum operator^(bignum lhs, int32_t rhs)
     {
         return lhs ^= rhs;
     }
 
-    bignum& bignum::operator&=(size_t other)
+    bignum operator<<(bignum lhs, int32_t n)
     {
-        mpz_t tmp;
-        mpz_init_set_ui(tmp, other);
-        mpz_and(m_Internal, m_Internal, tmp);
-        mpz_clear(tmp);
-        return *this;
+        return lhs <<= n;
     }
 
-    bignum& bignum::operator|=(size_t other)
+    bignum operator>>(bignum lhs, int32_t n)
     {
-        mpz_t tmp;
-        mpz_init_set_ui(tmp, other);
-        mpz_ior(m_Internal, m_Internal, tmp);
-        mpz_clear(tmp);
-        return *this;
+        return lhs >>= n;
     }
 
-    bignum& bignum::operator^=(size_t other)
-    {
-        mpz_t tmp;
-        mpz_init_set_ui(tmp, other);
-        mpz_xor(m_Internal, m_Internal, tmp);
-        mpz_clear(tmp);
-        return *this;
-    }
-
-    bignum operator&(bignum lhs, size_t rhs)
-    {
-        return lhs &= rhs;
-    }
-
-    bignum operator|(bignum lhs, size_t rhs)
-    {
-        return lhs |= rhs;
-    }
-
-    bignum operator^(bignum lhs, size_t rhs)
-    {
-        return lhs ^= rhs;
-    }
-
-    bignum& bignum::operator&=(int other)
+    bignum& bignum::operator&=(int32_t other)
     {
         mpz_t tmp;
         mpz_init_set_si(tmp, other);
@@ -467,7 +555,7 @@ namespace crypto::bn
         return *this;
     }
 
-    bignum& bignum::operator|=(int other)
+    bignum& bignum::operator|=(int32_t other)
     {
         mpz_t tmp;
         mpz_init_set_si(tmp, other);
@@ -476,7 +564,7 @@ namespace crypto::bn
         return *this;
     }
 
-    bignum& bignum::operator^=(int other)
+    bignum& bignum::operator^=(int32_t other)
     {
         mpz_t tmp;
         mpz_init_set_si(tmp, other);
@@ -485,73 +573,159 @@ namespace crypto::bn
         return *this;
     }
 
-    bignum operator&(bignum lhs, int rhs)
+    bignum& bignum::operator<<=(int32_t n)
+    {
+        mpz_mul_2exp(m_Internal, m_Internal, n);
+        return *this;
+    }
+
+    bignum& bignum::operator>>=(int32_t n)
+    {
+        mpz_fdiv_q_2exp(m_Internal, m_Internal, n);
+        return *this;
+    }
+
+    bignum operator&(bignum lhs, int64_t rhs)
     {
         return lhs &= rhs;
     }
 
-    bignum operator|(bignum lhs, int rhs)
+    bignum operator|(bignum lhs, int64_t rhs)
     {
         return lhs |= rhs;
     }
 
-    bignum operator^(bignum lhs, int rhs)
+    bignum operator^(bignum lhs, int64_t rhs)
     {
         return lhs ^= rhs;
     }
 
-    bignum& bignum::operator<<=(size_t n)
+    bignum operator<<(bignum lhs, int64_t n)
+    {
+        return lhs <<= n;
+    }
+
+    bignum operator>>(bignum lhs, int64_t n)
+    {
+        return lhs >>= n;
+    }
+
+    bignum& bignum::operator&=(int64_t other)
+    {
+        mpz_t tmp;
+        mpz_init_set_si(tmp, other);
+        mpz_and(m_Internal, m_Internal, tmp);
+        mpz_clear(tmp);
+        return *this;
+    }
+
+    bignum& bignum::operator|=(int64_t other)
+    {
+        mpz_t tmp;
+        mpz_init_set_si(tmp, other);
+        mpz_ior(m_Internal, m_Internal, tmp);
+        mpz_clear(tmp);
+        return *this;
+    }
+
+    bignum& bignum::operator^=(int64_t other)
+    {
+        mpz_t tmp;
+        mpz_init_set_si(tmp, other);
+        mpz_xor(m_Internal, m_Internal, tmp);
+        mpz_clear(tmp);
+        return *this;
+    }
+
+    bignum& bignum::operator<<=(int64_t n)
     {
         mpz_mul_2exp(m_Internal, m_Internal, n);
         return *this;
     }
 
-    bignum& bignum::operator>>=(size_t n)
+    bignum& bignum::operator>>=(int64_t n)
     {
         mpz_fdiv_q_2exp(m_Internal, m_Internal, n);
         return *this;
     }
+    
+    bignum operator&(bignum lhs, uint64_t rhs)
+    {
+        return lhs &= rhs;
+    }
 
-    bignum operator<<(bignum lhs, size_t n)
+    bignum operator|(bignum lhs, uint64_t rhs)
+    {
+        return lhs |= rhs;
+    }
+
+    bignum operator^(bignum lhs, uint64_t rhs)
+    {
+        return lhs ^= rhs;
+    }
+
+    bignum operator<<(bignum lhs, uint64_t n)
     {
         return lhs <<= n;
     }
 
-    bignum operator>>(bignum lhs, size_t n)
+    bignum operator>>(bignum lhs, uint64_t n)
     {
         return lhs >>= n;
     }
 
-    bignum& bignum::operator<<=(int n)
+    bignum& bignum::operator&=(uint64_t other)
+    {
+        mpz_t tmp;
+        mpz_init_set_ui(tmp, other);
+        mpz_and(m_Internal, m_Internal, tmp);
+        mpz_clear(tmp);
+        return *this;
+    }
+
+    bignum& bignum::operator|=(uint64_t other)
+    {
+        mpz_t tmp;
+        mpz_init_set_ui(tmp, other);
+        mpz_ior(m_Internal, m_Internal, tmp);
+        mpz_clear(tmp);
+        return *this;
+    }
+
+    bignum& bignum::operator^=(uint64_t other)
+    {
+        mpz_t tmp;
+        mpz_init_set_ui(tmp, other);
+        mpz_xor(m_Internal, m_Internal, tmp);
+        mpz_clear(tmp);
+        return *this;
+    }
+
+    bignum& bignum::operator<<=(uint64_t n)
     {
         mpz_mul_2exp(m_Internal, m_Internal, n);
         return *this;
     }
 
-    bignum& bignum::operator>>=(int n)
+    bignum& bignum::operator>>=(uint64_t n)
     {
         mpz_fdiv_q_2exp(m_Internal, m_Internal, n);
         return *this;
     }
 
-    bignum operator<<(bignum lhs, int n)
-    {
-        return lhs <<= n;
-    }
-
-    bignum operator>>(bignum lhs, int n)
-    {
-        return lhs >>= n;
-    }
-
-    bignum::operator size_t() const
-    {
-        return mpz_get_ui(m_Internal);
-    }
-
-    bignum::operator int() const
+    bignum::operator int32_t() const
     {
         return mpz_get_si(m_Internal);
+    }
+
+    bignum::operator int64_t() const
+    {
+        return mpz_get_si(m_Internal);
+    }
+
+    bignum::operator uint64_t() const
+    {
+        return mpz_get_ui(m_Internal);
     }
 
     size_t bignum::bit_count() const

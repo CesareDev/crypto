@@ -16,12 +16,12 @@ int main()
 
     std::string s { "Hello World!" };
     std::cout << "Hashing function on the string: " << s << std::endl;
-    std::cout << "Sha1:   " << crypto::sha::hash_string(s, crypto::sha::algorithm::Sha1).get_string(16) << std::endl;
-    std::cout << "Sha224: " << crypto::sha::hash_string(s, crypto::sha::algorithm::Sha224).get_string(16) << std::endl;
-    std::cout << "Sha256: " << crypto::sha::hash_string(s, crypto::sha::algorithm::Sha256).get_string(16) << std::endl;
-    std::cout << "Sha384: " << crypto::sha::hash_string(s, crypto::sha::algorithm::Sha384).get_string(16) << std::endl;
-    std::cout << "Sha512: " << crypto::sha::hash_string(s, crypto::sha::algorithm::Sha512).get_string(16) << std::endl;
-    std::cout << "MD5:    " << crypto::sha::hash_string(s, crypto::sha::algorithm::MD5).get_string(16) << std::endl;
+    std::cout << "Sha1:   " << crypto::hash::hash_string(s, crypto::hash::algorithm::Sha1).get_string(16) << std::endl;
+    std::cout << "Sha224: " << crypto::hash::hash_string(s, crypto::hash::algorithm::Sha224).get_string(16) << std::endl;
+    std::cout << "Sha256: " << crypto::hash::hash_string(s, crypto::hash::algorithm::Sha256).get_string(16) << std::endl;
+    std::cout << "Sha384: " << crypto::hash::hash_string(s, crypto::hash::algorithm::Sha384).get_string(16) << std::endl;
+    std::cout << "Sha512: " << crypto::hash::hash_string(s, crypto::hash::algorithm::Sha512).get_string(16) << std::endl;
+    std::cout << "MD5:    " << crypto::hash::hash_string(s, crypto::hash::algorithm::MD5).get_string(16) << std::endl;
     std::cout << std::endl;
 
     std::cout << "-------- Base 64 --------" << std::endl;

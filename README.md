@@ -15,16 +15,24 @@ Usage is really simple just include the files that you need or direcly `<crypto/
 ```cpp
 #include <iostream>
 #include <crypto/crypto.hpp>
-// or #include <crypto/sha.hpp>
+// or #include <crypto/hash.hpp>
 
 int main()
 {
-    std::cout << cypto::sha::hash_string("Hello World!", crypto::sha::algorithm::Sha256) << std::endl;
+    std::cout << cypto::hash::hash_string("Hello World!", crypto::hash::algorithm::Sha256) << std::endl;
     return 0;
 }
 ```
 
 You can also look into the `test` directory for some examples.
+
+## Documentation
+
+The header files are commented with doxy documentation so they should be easy to read and understand but if you want a static documentation you can run in the root directory:
+
+```sh
+doxygen Doxyfile
+```
 
 ## Disclaimer
 
@@ -33,4 +41,8 @@ This library is made just for recreational purpose. If you want to use it for th
 ## Dependencies
 
 - [cmake](https://cmake.org/), build system.
-- [gmp](https://gmplib.org/) for big number arithmetic.
+- [gmp](https://gmplib.org/), for big number arithmetic.
+
+### Optional
+
+- [doxygen](https://www.doxygen.nl/), for building the documentation.
