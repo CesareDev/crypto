@@ -1,9 +1,3 @@
-/**
- * @file bignum.hpp
- * @brief In this file there is the definition of the class that represents the arbitrary precions number.
- * Here are included the class and some related mathematical functions used for cryptographic purposes.
- */
-
 #pragma once
 
 #include <cstdint>

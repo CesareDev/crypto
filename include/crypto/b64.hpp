@@ -1,15 +1,10 @@
-/**
- * @file b64.hpp
- * @brief In this file there are functions used to encode and decode sgring or file into and from Base64 encoding.
- */
-
 #pragma once
 
 #include <string>
 
 /**
  * \namespace crypto::b64
- * @brief Base64 encoding and decoding functions.
+ * @brief Base64 encoding and decoding functions for strings and files.
  */
 namespace crypto::b64
 {
@@ -28,7 +23,7 @@ namespace crypto::b64
     std::string encode_file(const std::string& input_file);
 
     /**
-     * @brief Function to decode a file from Base64 encoding.
+     * @brief Function to decode a file from Base64 encoding. Be aware that this function can throw an error.
      * @param input The string that needed to be decoded.
      * @return The \p input string decoded.
      */

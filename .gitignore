@@ -22,4 +22,4 @@ CMakeUserPresets.json
 # Custom
 .cache/
 build/
-docs/
+html/

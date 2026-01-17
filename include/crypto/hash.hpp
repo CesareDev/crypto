@@ -1,8 +1,3 @@
-/**
- * @file hash.hpp
- * @brief In this file there are functions used to perform hashing operation with variours algorithms.
- */
-
 #pragma once
 
 #include <string>
@@ -10,7 +5,7 @@
 
 /**
  * \namespace crypto::hash
- * @brief Hashing functions.
+ * @brief Hashing functions for string and files.
  */
 namespace crypto::hash
 {
