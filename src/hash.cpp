@@ -732,7 +732,7 @@ static crypto::bn::bignum hashmd5(const std::string& input)
     return res;
 }
 
-namespace crypto::sha
+namespace crypto::hash
 {
     bn::bignum hash_string(const std::string& input, crypto::hash::algorithm algorithm)
     {
