@@ -2,9 +2,9 @@
 #include <iomanip>
 #include <vector>
 #include <sstream>
-#include <fstream>
 
 #include <crypto/hash.hpp>
+#include <crypto/utils.hpp>
 
 static uint32_t left_rotate(uint32_t value, uint32_t bits)
 {
@@ -757,17 +757,7 @@ namespace crypto::hash
 
     bn::bignum hash_file(const std::string& input_file, crypto::hash::algorithm algorithm)
     {
-        std::ifstream file_stream(input_file, std::ios::binary | std::ios::ate);
-
-        if (!file_stream.is_open())
-            throw std::runtime_error("[HASHING] Error opening file: " + input_file);
-
-        uint64_t file_size = file_stream.tellg();
-        file_stream.seekg(std::ios::beg);
-
-        std::string input(file_size, 0);
-        if (!file_stream.read(input.data(), file_size).good())
-            throw std::runtime_error("[HASHING] Error reading file: " + input_file);
+        std::string input { utils::read_file_string(input_file) };
 
         switch (algorithm)
         {

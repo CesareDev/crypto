@@ -1,8 +1,9 @@
 #include <cstdint>
+#include <stdexcept>
 #include <unordered_map>
-#include <fstream>
 
 #include <crypto/b64.hpp>
+#include <crypto/utils.hpp>
 
 static uint8_t encoding[] =
 {
@@ -125,36 +126,13 @@ namespace crypto::b64
 
     std::string encode_file(const std::string& input_file)
     {
-        std::ifstream input_stream(input_file, std::ios::binary | std::ios::ate);
-        if (!input_stream.is_open())
-            throw std::runtime_error("[BASE 64] Error opening file: " + input_file);
-
-        uint64_t file_size = input_stream.tellg();
-        input_stream.seekg(std::ios::beg);
-
-        std::string buffer(file_size, 0);
-        if (!input_stream.read(buffer.data(), file_size).good())
-            throw std::runtime_error("[BASE 64] Error reading file: " + input_file);
-
+        std::string buffer { utils::read_file_string(input_file) };
         return encode_string(buffer);
     }
 
     std::string decode_file(const std::string& input_file)
     {
-        std::ifstream input_stream(input_file, std::ios::binary | std::ios::ate);
-        if (!input_stream.is_open())
-            throw std::runtime_error("[BASE 64] Error opening file: " + input_file);
-
-        uint64_t file_size = input_stream.tellg();
-        input_stream.seekg(std::ios::beg);
-
-        if (file_size % 4 != 0)
-            throw std::runtime_error("[BASE 64] Non valid file: " + input_file);
-
-        std::string buffer(file_size, 0);
-        if (!input_stream.read(buffer.data(), file_size).good())
-            throw std::runtime_error("[BASE 64] Error reading file: " + input_file);
-
+        std::string buffer { utils::read_file_string(input_file) };
         return decode_string(buffer);
     }
 }

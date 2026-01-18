@@ -9,6 +9,7 @@ add_library(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/hash.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/bignum.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rsa.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils.cpp
 )
 
 # GNU bignum library

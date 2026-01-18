@@ -4,6 +4,21 @@
 
 int main()
 {
+    std::cout << "-------- Utils --------" << std::endl;
+
+    std::string file = "test.txt";
+    std::string w_data = "How are you?\nFine, thank you!";
+    std::cout << "Write to file: " << file << std::endl; 
+    crypto::utils::write_file("test.txt", w_data);
+
+    std::cout << "Reading from file: " << file << std::endl; 
+    std::string r_data { crypto::utils::read_file_string("test.txt") };
+    std::cout << r_data << std::endl;
+
+    std::cout << "Deleting file: " << file << std::endl; 
+    crypto::utils::delete_file(file);
+    std::cout << std::endl;
+
     std::cout << "-------- Big Number --------" << std::endl;
     crypto::bn::bignum a { 21764937 };
     crypto::bn::bignum b("123456789123456789123456789123456789123456789", 10);
