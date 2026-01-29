@@ -6,17 +6,17 @@
 #include <crypto/hash.hpp>
 #include <crypto/utils.hpp>
 
-static uint32_t left_rotate(uint32_t value, uint32_t bits)
+static inline uint32_t left_rotate(uint32_t value, uint32_t bits)
 {
     return (value << bits) | (value >> (sizeof(uint32_t) * 8 - bits));
 }
 
-static uint32_t right_rotate(uint32_t value, uint32_t bits)
+static inline uint32_t right_rotate(uint32_t value, uint32_t bits)
 {
     return (value >> bits) | (value << (sizeof(uint32_t) * 8 - bits));
 }
 
-static uint64_t right_rotate(uint64_t value, uint64_t bits)
+static inline uint64_t right_rotate(uint64_t value, uint64_t bits)
 {
     return (value >> bits) | (value << (sizeof(uint64_t) * 8 - bits));
 }
@@ -734,19 +734,19 @@ static crypto::bn::bignum hashmd5(const std::string& input)
 
 namespace crypto::hash
 {
-    bn::bignum hash_string(const std::string& input, crypto::hash::algorithm algorithm)
+    bn::bignum hash_string(const std::string& input, algorithm algorithm)
     {
         switch (algorithm)
         {
-            case crypto::hash::algorithm::Sha1:
+            case crypto::hash::algorithm::SHA1:
                 return hash1(input);
-            case crypto::hash::algorithm::Sha224:
+            case crypto::hash::algorithm::SHA224:
                 return hash224(input);
-            case crypto::hash::algorithm::Sha256:
+            case crypto::hash::algorithm::SHA256:
                 return hash256(input);
-            case crypto::hash::algorithm::Sha384:
+            case crypto::hash::algorithm::SHA384:
                 return hash384(input);
-            case crypto::hash::algorithm::Sha512:
+            case crypto::hash::algorithm::SHA512:
                 return hash512(input);
             case crypto::hash::algorithm::MD5:
                 return hashmd5(input);
@@ -755,21 +755,21 @@ namespace crypto::hash
         }
     }
 
-    bn::bignum hash_file(const std::string& input_file, crypto::hash::algorithm algorithm)
+    bn::bignum hash_file(const std::string& input_file, algorithm algorithm)
     {
         std::string input { utils::read_file_string(input_file) };
 
         switch (algorithm)
         {
-            case crypto::hash::algorithm::Sha1:
+            case crypto::hash::algorithm::SHA1:
                 return hash1(input);
-            case crypto::hash::algorithm::Sha224:
+            case crypto::hash::algorithm::SHA224:
                 return hash224(input);
-            case crypto::hash::algorithm::Sha256:
+            case crypto::hash::algorithm::SHA256:
                 return hash256(input);
-            case crypto::hash::algorithm::Sha384:
+            case crypto::hash::algorithm::SHA384:
                 return hash384(input);
-            case crypto::hash::algorithm::Sha512:
+            case crypto::hash::algorithm::SHA512:
                 return hash512(input);
             case crypto::hash::algorithm::MD5:
                 return hashmd5(input);

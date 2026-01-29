@@ -53,7 +53,7 @@ static std::vector<uint8_t> mgf1(const std::vector<uint8_t>& seed, uint64_t len)
                 spc[i] = c[i - seed.size()];
         }
         std::string input(spc.begin(), spc.end());
-        std::vector<uint8_t> hash { crypto::hash::hash_string(input, crypto::hash::algorithm::Sha256).get_byte_array(true) };
+        std::vector<uint8_t> hash { crypto::hash::hash_string(input, crypto::hash::algorithm::SHA256).get_byte_array(true) };
         for (uint8_t byte : hash)
             t.push_back(byte);
         ++counter;
@@ -89,7 +89,7 @@ namespace crypto::rsa
             throw std::runtime_error("[RSA] Publick key non valid");
 
         std::vector<uint8_t> msg(plain_text.begin(), plain_text.end());
-        std::vector<uint8_t> l_hash = crypto::hash::hash_string(label, hash::algorithm::Sha256).get_byte_array(true);
+        std::vector<uint8_t> l_hash = crypto::hash::hash_string(label, hash::algorithm::SHA256).get_byte_array(true);
 
         uint64_t k { pub_key.module.byte_count() };
         uint64_t h_len { 32 };
@@ -157,7 +157,7 @@ namespace crypto::rsa
         bn::bignum c { array_to_bignum(chiper_text) };
         bn::bignum m { bn::exp_mod(c, pri_key.dec_exp, pri_key.module) };
         std::vector<uint8_t> em { bignum_to_array(m, k) };
-        std::vector<uint8_t> l_hash { hash::hash_string(label, hash::algorithm::Sha256).get_byte_array(true) };
+        std::vector<uint8_t> l_hash { hash::hash_string(label, hash::algorithm::SHA256).get_byte_array(true) };
         uint8_t y = em[0];
         if (y != 0x00)
             throw std::runtime_error("[RSA] Decoding error (y != 0x00)");

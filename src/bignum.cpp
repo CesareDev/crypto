@@ -728,14 +728,14 @@ namespace crypto::bn
         return mpz_get_ui(m_Internal);
     }
 
-    size_t bignum::bit_count() const
+    uint64_t bignum::bit_count() const
     {
-        return mpz_sizeinbase(m_Internal, 2);
+        return byte_count() * 8;
     }
 
-    size_t bignum::byte_count() const
+    uint64_t bignum::byte_count() const
     {
-        return (bit_count() + 7) / 8;
+        return mpz_size(m_Internal) * sizeof(mp_limb_t);
     }
 
     std::string bignum::get_string(int base) const
@@ -748,10 +748,10 @@ namespace crypto::bn
 
     std::vector<uint8_t> bignum::get_byte_array(bool big_endian) const
     {
-        size_t size = byte_count();
+        uint64_t size = byte_count();
         std::vector<uint8_t> res;
         res.reserve(size);
-        for (size_t i {}; i < size; ++i)
+        for (uint64_t i {}; i < size; ++i)
         {
             uint8_t b = static_cast<int>(*this >> (i * 8)) & 0xFF;
             res.push_back(b);
@@ -767,7 +767,7 @@ namespace crypto::bn
         return std::string(bin_array.begin(), bin_array.end());
     }
 
-    bignum exp(const bignum& base, size_t exponent)
+    bignum exp(const bignum& base, uint64_t exponent)
     {
         bignum res;
         mpz_pow_ui(res.m_Internal, base.m_Internal, exponent);
@@ -802,7 +802,7 @@ namespace crypto::bn
         return res;
     }
 
-    bignum generate_prime(size_t bit_size)
+    bignum generate_prime(uint64_t bit_size)
     {
         bignum prime {};
         bignum tmp {};

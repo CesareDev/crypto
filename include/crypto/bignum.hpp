@@ -223,13 +223,13 @@ namespace crypto::bn
              * @brief Return the number of bit used by the bignum.
              * @return The number of bit.
              */
-            size_t bit_count() const;
+            uint64_t bit_count() const;
 
             /**
              * @brief Return the number of byte used by the bignum.
              * @return The number of byte.
              */
-            size_t byte_count() const;
+            uint64_t byte_count() const;
 
             /**
              * @brief Return the string representation of the number in \p base base.
@@ -252,12 +252,12 @@ namespace crypto::bn
              */
             std::string get_byte_string(bool big_endian = false) const;
 
-            friend bignum exp(const bignum& base, size_t exponent);
+            friend bignum exp(const bignum& base, uint64_t exponent);
             friend bignum exp_mod(const bignum& base, const bignum& exponent, const bignum& mod);
             friend bignum inverse_mod(const bignum& n, const bignum& mod);
             friend bignum gcd(const bignum& a, const bignum& b);
             friend bignum next_prime(const bignum& n);
-            friend bignum generate_prime(size_t bit_size);
+            friend bignum generate_prime(uint64_t bit_size);
 
         private:
             mpz_t m_Internal;
@@ -269,7 +269,7 @@ namespace crypto::bn
      * @param exponent The exponent.
      * @return Return the result of \f$base^{exponent}\f$.
      */
-    bignum exp(const bignum& base, size_t exponent);
+    bignum exp(const bignum& base, uint64_t exponent);
 
     /**
      * @brief Compute \p base raised to the \p exponent modulo \p mod: \f$base^{exponent}\pmod{mod}\f$.
@@ -308,5 +308,5 @@ namespace crypto::bn
      * @param bit_size The size in bits of the random prime number.
      * @return A random prime number of \p bit_size bits.
      */
-    bignum generate_prime(size_t bit_size);
+    bignum generate_prime(uint64_t bit_size);
 }
