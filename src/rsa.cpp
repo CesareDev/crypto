@@ -1,8 +1,6 @@
-#include <random> // TODO use a proper random number generator
-#include <chrono>
-
 #include <crypto/hash.hpp>
 #include <crypto/rsa.hpp>
+#include <crypto/random.hpp>
 
 static crypto::bn::bignum array_to_bignum(const std::vector<uint8_t>& arr)
 {
@@ -112,11 +110,8 @@ namespace crypto::rsa
 
         std::vector<uint8_t> seed;
         seed.reserve(h_len);
-        std::random_device dev;
-        std::mt19937 rng(dev());
-        auto time_seed { std::chrono::steady_clock::now().time_since_epoch().count() };
         for (uint64_t i {}; i < h_len; ++i)
-            seed.push_back(std::uniform_int_distribution<std::mt19937::result_type>(0, UINT8_MAX)(rng) ^ static_cast<uint8_t>(time_seed));
+            seed.push_back(rng::generate_u8());
 
         std::vector<uint8_t> db_mask { mgf1(seed, k - h_len - 1) };
         uint64_t masked_db_len = k - h_len - 1;

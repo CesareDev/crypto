@@ -1,8 +1,7 @@
 #include <algorithm>
-#include <random>
-#include <chrono>
 
 #include <crypto/bignum.hpp>
+#include <crypto/random.hpp>
 
 namespace crypto::bn
 {
@@ -807,11 +806,7 @@ namespace crypto::bn
         bignum prime {};
         bignum tmp {};
 
-        std::random_device dev;
-        std::mt19937 rng(dev());
-        auto seed1 { std::uniform_int_distribution<std::mt19937::result_type>(0, UINT64_MAX)(rng) };
-        auto seed2 { std::chrono::steady_clock::now().time_since_epoch().count() };
-        auto seed = seed1 ^ seed2;
+        auto seed { rng::generate_u64() };
 
         gmp_randstate_t state { 0 };
         gmp_randinit_mt(state);

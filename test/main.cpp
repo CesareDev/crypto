@@ -4,21 +4,6 @@
 
 int main()
 {
-    std::cout << "-------- Utils --------" << std::endl;
-
-    std::string file = "test.txt";
-    std::string w_data = "How are you?\nFine, thank you!";
-    std::cout << "Write to file: " << file << std::endl; 
-    crypto::utils::write_file("test.txt", w_data);
-
-    std::cout << "Reading from file: " << file << std::endl; 
-    std::string r_data { crypto::utils::read_file_string("test.txt") };
-    std::cout << r_data << std::endl;
-
-    std::cout << "Deleting file: " << file << std::endl; 
-    crypto::utils::delete_file(file);
-    std::cout << std::endl;
-
     std::cout << "-------- Big Number --------" << std::endl;
     crypto::bn::bignum a { 21764937 };
     crypto::bn::bignum b("123456789123456789123456789123456789123456789", 10);
@@ -79,6 +64,17 @@ int main()
 
     auto aes_dec = crypto::aes::decrypt_message(aes_key, aes_enc);
     std::cout << "Decrypted message: " << aes_dec << std::endl;
+    std::cout << std::endl;
     
+    std::cout << "-------- RNG --------" << std::endl;
+    std::cout << std::dec << crypto::rng::generate_u64() << std::endl;
+    std::cout << std::dec << crypto::rng::generate_u32() << std::endl;
+    std::cout << std::dec << crypto::rng::generate_u16() << std::endl;
+    std::cout << std::dec << (int)crypto::rng::generate_u8() << std::endl;
+    std::cout << std::dec << crypto::rng::generate_i64() << std::endl;
+    std::cout << std::dec << crypto::rng::generate_i32() << std::endl;
+    std::cout << std::dec << crypto::rng::generate_i16() << std::endl;
+    std::cout << std::dec << (int)crypto::rng::generate_i8() << std::endl;
+
     return 0;
 }

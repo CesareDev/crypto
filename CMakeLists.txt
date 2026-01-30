@@ -11,6 +11,7 @@ add_library(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rsa.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/aes.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/random.cpp
 )
 
 # GNU bignum library
