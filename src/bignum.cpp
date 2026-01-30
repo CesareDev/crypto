@@ -806,7 +806,7 @@ namespace crypto::bn
         bignum prime {};
         bignum tmp {};
 
-        auto seed { rng::generate_u64() };
+        auto seed { rng::u64() };
 
         gmp_randstate_t state { 0 };
         gmp_randinit_mt(state);

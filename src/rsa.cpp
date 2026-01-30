@@ -111,7 +111,7 @@ namespace crypto::rsa
         std::vector<uint8_t> seed;
         seed.reserve(h_len);
         for (uint64_t i {}; i < h_len; ++i)
-            seed.push_back(rng::generate_u8());
+            seed.push_back(rng::u8());
 
         std::vector<uint8_t> db_mask { mgf1(seed, k - h_len - 1) };
         uint64_t masked_db_len = k - h_len - 1;
