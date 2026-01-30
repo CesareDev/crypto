@@ -8,7 +8,13 @@ namespace crypto::rng
 {
     void reseed()
     {
-        engine.seed(std::random_device{}());
+        std::random_device rd;
+        std::seed_seq seq
+        {
+            rd(), rd(), rd(), rd(),
+            rd(), rd(), rd(), rd(),
+        };
+        engine.seed(seq);
     }
 
     void reseed(uint64_t seed)
